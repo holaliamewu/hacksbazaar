@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react"
 import Hacks from "@/components/Hacks"
 import NavBar from "@/components/NavBar"
 
