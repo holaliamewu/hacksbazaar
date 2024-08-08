@@ -8,6 +8,7 @@ export default function Hacks() {
 
     const hacksData = [
         {
+            id: 0,
             username: "bro code",
             image: "",
             postedAt: "3m",
@@ -19,10 +20,12 @@ export default function Hacks() {
 
     const [ hacks, setHacks ] = useState(hacksData);
     const [ newHackMessage, setNewHackMessage ] = useState('')
+    let uid = 0
 
     function storeHackToDB() {
         setHacks([
             {
+                id: uid++,
                 username: "bro code",
                 image: "",
                 postedAt: "1s",
@@ -60,7 +63,9 @@ export default function Hacks() {
         <div className="flex flex-col space-y-6 border-t pt-10 " >
             
           { hacks.map(hack => (
-                <div className="flex flex-col space-y-3 border rounded-md p-3 w-[90%] max-w-[500px] mx-auto" >
+                <div 
+                key={hack.id}
+                className="flex flex-col space-y-3 border rounded-md p-3 w-[90%] max-w-[500px] mx-auto" >
                     <span className="flex justify-between" >
                     <span className="flex gap-3 items-center" >
                         <span className="" >🤵🏼</span>
