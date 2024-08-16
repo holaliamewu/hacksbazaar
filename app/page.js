@@ -1,19 +1,23 @@
-import { Analytics } from "@vercel/analytics/react"
-import Hacks from "@/components/Hacks"
-import NavBar from "@/components/NavBar"
+"use client" 
+import { Analytics } from "@vercel/analytics/react";
+import Hacks from "@/components/Hacks";
+import NavBar from "@/components/NavBar";
+import Login from "@/components/Auth";
+import { useAuth } from "@/lib/shared/contexts/SignupContext";
+import StartingAuthModal from "@/components/StartingAuthModal";
 
 export default function App() {
+  const [ user, setUser, showAuthModal, showStartingAuthModal, setShowStartingAuthModal ] = useAuth();
 
-  return(
-        <div className="w-[90%] md:w-[50%] mx-auto min-h-screen " >
-           <NavBar />
-            <Hacks />
-        </div>
-  )
+  return (
+    <div className="w-[90%] md:w-[50%] mx-auto min-h-screen">
+      <Analytics />
+      <NavBar />
+      <Hacks />
+      {showStartingAuthModal && 
+        <StartingAuthModal  />
+      }
+      {showAuthModal && <Login />}
+    </div>
+  );
 }
-                    // <ul className="flex justify-center space-x-3" >
-                    //     <li className="border px-3 py-1 rounded-full text-sm text-zinc-500" >for you</li>
-                    //     <li className="border px-3 py-1 rounded-full text-sm text-zinc-500" >tech</li>
-                    //     <li className="border px-3 py-1 rounded-full text-sm text-zinc-500" >react.js</li>
-                    //     <li className="border px-3 py-1 rounded-full text-sm text-zinc-500" >filming</li>
-                    // </ul>

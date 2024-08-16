@@ -19,24 +19,31 @@ export default function Hacks() {
     ]
 
     const [ hacks, setHacks ] = useState(hacksData);
-    const [ newHackMessage, setNewHackMessage ] = useState('')
-    let uid = 0
+    const [ newHackMessage, setNewHackMessage ] = useState('');
+    const [ isSignedIn, setIsSignedIn ] = useState(false);
+    const [ showAuthModal, setShowAuthModal ] = useState(false);
+
+    let uid = 0;
 
     function storeHackToDB() {
-        setHacks([
-            {
-                id: uid++,
-                username: "bro code",
-                image: "",
-                postedAt: "1s",
-                hackmessage: newHackMessage,
-                upvotes: 0, 
-                downvotes: 0
-            },
-            ...hacks
-        ])
 
-        setNewHackMessage('')
+        if( newHackMessage.length > 0 && isSignedIn ){
+                setHacks([
+                    {
+                        id: uid++,
+                        username: "bro code",
+                        image: "",
+                        postedAt: "1s",
+                        hackmessage: newHackMessage,
+                        upvotes: 0, 
+                        downvotes: 0
+                    },
+                    ...hacks
+                ])
+                setNewHackMessage('');
+        } else if( !isSignedIn ){
+            setShowAuthModal(true)
+        }
     }
 
     function handleChange(e) {
@@ -77,8 +84,10 @@ export default function Hacks() {
                     <span className="flex items-center space-x-4 ml-7" >
                         <span className="flex text-[12px] gap-1" ><ThumbsUp size='16' strokeWidth='1.5' />{hack.upvotes > 0 ? hack.upvotes : ''}</span>
                         <span className="flex text-[12px] gap-1" ><ThumbsDown size='16' strokeWidth='1.5' />{hack.downvotes > 0 ? hack.downvotes : '' }</span>
-                        <span className="text-[12px]" ><Heart size='16' strokeWidth='1.5' /></span>
+                        <span className="text-[12px] " ><Heart size='16' strokeWidth='1.5' /></span>
                     </span>
+
+
                 </div>
                 
                 )) 
