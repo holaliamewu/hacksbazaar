@@ -1,5 +1,6 @@
 'use client'
 
+import { useAuth } from "@/lib/shared/contexts/SignupContext";
 import { AuthenticateAnonymously } from "@/lib/util";
 import { BadgeAlert } from "lucide-react";
 import { useState } from "react"
@@ -7,6 +8,7 @@ import { useState } from "react"
 export default function Login() {
 
   const [ authType, setAuthType ] = useState('login');
+  const { setShowAuthModal, setLoggedIn } = useAuth()
 
   // function displayAnonMessage() {
   //   setShowAnonMessage(true);
@@ -77,7 +79,10 @@ export default function Login() {
                 Login
               </button>
               <button 
-              onClick={ AuthenticateAnonymously }
+              onClick={ () => {
+                setShowAuthModal(false);
+                setLoggedIn(true)
+              } }
               className="inline-flex items-center justify-center border whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
                 Keep me anonymous 👽
               </button>

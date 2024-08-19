@@ -1,8 +1,9 @@
+"use client"
 import { useAuth } from '@/lib/shared/contexts/SignupContext'
 import React from 'react'
 
 export default function NavBar() {
-  const [ user, setUser,loggedIn, setShowAuthModal ] = useAuth()
+  const { user, setUser,loggedIn, setShowAuthModal } = useAuth()
 
   return (
         <nav className="flex justify-between items-center pt-8" >
