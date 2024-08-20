@@ -1,5 +1,6 @@
 'use client'; 
 
+import { useAuth } from "@/lib/shared/contexts/SignupContext";
 import { Heart, ThumbsDown, ThumbsUp } from "lucide-react"
 import { useState } from "react";
 
@@ -20,14 +21,13 @@ export default function Hacks() {
 
     const [ hacks, setHacks ] = useState(hacksData);
     const [ newHackMessage, setNewHackMessage ] = useState('');
-    const [ isSignedIn, setIsSignedIn ] = useState(false);
-    const [ showAuthModal, setShowAuthModal ] = useState(false);
+    const { showAuthModal, setShowAuthModal, loggedIn, setLogged } = useAuth()
 
     let uid = 0;
 
     function storeHackToDB() {
 
-        if( newHackMessage.length > 0 && isSignedIn ){
+        if( newHackMessage.length > 0 && loggedIn ){
                 setHacks([
                     {
                         id: uid++,
@@ -41,7 +41,7 @@ export default function Hacks() {
                     ...hacks
                 ])
                 setNewHackMessage('');
-        } else if( !isSignedIn ){
+        } else if( newHackMessage.length > 0 && !loggedIn ) {
             setShowAuthModal(true)
         }
     }
@@ -52,19 +52,19 @@ export default function Hacks() {
 
     return(
         <>
-        <div className="flex justify-center gap-2 my-10 w-[600px] mx-auto" >
+        <div className="flex justify-center relative w-[90%] md:w-md gap-2 my-10 w-[600px] mx-auto min-h-32 bg-gray-50 w-full rounded-md p-2 border " >
               <span className="border flex items-center justify-center rounded-sm aspect-square h-[36px] text-2xl " >🤵🏼</span>
               
-              <span className="min-w-[90%] md:w-md">
+              <span className="flex flex-col w-[90%] md:w-md">
                   <textarea
                   value={newHackMessage}
                   onChange={handleChange}
                   placeholder="got that hack? pour it here." 
-                  className="h-32 w- bg-gray-50 w-full rounded-md p-2 border   resize-none" 
+                  className="h-32 bg-gray-50  resize-none" 
                   />
                   <button 
                   onClick={storeHackToDB}
-                  className="mr-auto bg-blue-300 text-white text-sm font-semibold shadow-xl shadow-gray-200 rounded-md w-[80px] h-[40px] " >post!</button>
+                  className="absolute bottom-2 right-2 ml-auto bg-blue-300 text-white text-sm font-semibold shadow-xl shadow-gray-200 rounded-md w-[80px] h-[40px] " >post!</button>
               </span>
             </div>
         <div className="flex flex-col space-y-6 border-t pt-10 " >
@@ -72,7 +72,7 @@ export default function Hacks() {
           { hacks.map(hack => (
                 <div 
                 key={hack.id}
-                className="flex flex-col space-y-3 border rounded-md p-3 w-[90%] max-w-[500px] mx-auto" >
+                className="flex flex-col space-y-3 border rounded-md p-3 w-[90%] max-w-[500px] " >
                     <span className="flex justify-between" >
                     <span className="flex gap-3 items-center" >
                         <span className="" >🤵🏼</span>

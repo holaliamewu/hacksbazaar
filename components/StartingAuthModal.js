@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/shared/contexts/SignupContext";
 
 export default function StartingAuthModal() {
  
-  const { setShowStartingAuthModal } = useAuth();
+  const { setShowStartingAuthModal, setShowAuthModal } = useAuth();
 
 
   return (
@@ -16,7 +16,12 @@ export default function StartingAuthModal() {
           <h1 className="text-2xl font-bold" >Hey, thanks for hopping on <span className="border-b border-b-teal-300 border-b-4" >hacksbazaar!</span></h1>
           <p className="text-sm text-zinc-600" >It's good to have you here. Let's get you started.</p>
           <span className="flex flex-col space-y-2" >
-          <button className="inline-flex bg-teal-300 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+          <button
+          onClick={ () => {
+            setShowStartingAuthModal(false);
+            setShowAuthModal(true)
+          }}
+          className="inline-flex bg-teal-300 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
                 Get Started
               </button>
           <button 
