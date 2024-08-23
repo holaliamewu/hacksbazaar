@@ -14,8 +14,8 @@ export default function StartingAuthModal() {
             className="flex flex-col space-y-6 rounded-lg border backdrop-blur-3xl bg-white/[.7] bg-card text-card-foreground shadow-sm w-[90%] max-w-md p-6 space-y-4"
             data-v0-t="card"
           >
-          <h1 className="text-2xl font-bold" >Hey, thanks for hopping on <span className="border-b border-b-teal-300 border-b-4" >hacksbazaar!</span></h1>
-          <p className="text-sm text-zinc-600" >It&#39;s good to have you here. Let'&#39;s get you started.</p>
+          <h1 className="text-2xl font-bold" >Hey, thanks for hopping on <span className="border-b border-b-teal-300 border-b-4" >hacksbazaar!🎉</span></h1>
+          <p className="text-sm text-zinc-600" >It&#39;s good to have you here. Let&#39;s get you started.</p>
           <span className="flex flex-col space-y-2" >
           <button
           onClick={ () => {
