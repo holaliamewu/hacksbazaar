@@ -1,12 +1,12 @@
 export default function MyMessage() {
     return (
         <main className="text-md text-black flex flex-col gap-8 my-[50px]">
-            <p className="italic font-bold">TL;DR: Join the waitlist so you don't miss the launch!</p>
+            <p className="italic font-bold">tl;dr: join the waitlist so you don't miss the launch!</p>
             <p className="text-2xl">👋🏼,</p>
-            <p>Hey, thanks for making time for Hacksbazaar's first launch. I'm so grateful for this gesture. Seriously.</p>
-            <p>First of all, we want to apologize for not delivering on our word to release Hacksbazaar today due to life<span className="italic"> life-ing</span>.</p>
-            <p>Hacksbazaar will be released probably <span className="font-bold italic">before 1st September, 2024.</span></p>
-            <p className="text-black">Join the waitlist so you don't miss a thing!</p>
+            <p>hey, thanks for making time for hacksbazaar's first launch. I'm so grateful for this gesture. seriously.</p>
+            <p>first of all, we want to apologize for not delivering on our word to release hacksbazaar today due to life<span className="italic"> life-ing</span>.</p>
+            <p>hacksbazaar will be released probably <span className="font-bold italic">before 1st september, 2024.</span></p>
+            <p className="text-black">join the waitlist so you don't miss a thing!</p>
 
             <div id="mc_embed_shell">
                 <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css" />
@@ -23,7 +23,7 @@ export default function MyMessage() {
                                 <span className="asterisk">*</span> indicates required
                             </div>
                             <div className="mc-field-group mb-4">
-                                <label htmlFor="mce-EMAIL" className="block mb-2">Email Address <span className="asterisk">*</span></label>
+                                <label htmlFor="mce-EMAIL" className="block mb-2">email address <span className="asterisk">*</span></label>
                                 <input type="email" name="EMAIL" className="required email w-full p-2 border rounded-md" id="mce-EMAIL" required />
                             </div>
                             <div id="mce-responses" className="clear foot">
