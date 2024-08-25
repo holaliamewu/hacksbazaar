@@ -6,7 +6,7 @@ export default function MyMessage() {
             <p>Hey, thanks for making time for Hacksbazaar's first launch. I'm so grateful for this gesture. Seriously.</p>
             <p>First of all, we want to apologize for not delivering on our word to release Hacksbazaar today due to <span className="italic">life life-ing</span>.</p>
             <p>Hacksbazaar will be released probably <span className="font-bold italic">before 1st September, 2024.</span></p>
-            <p>Join the waitlist so you don't miss a thing!</p>
+            <p className="text-black">Join the waitlist so you don't miss a thing!</p>
 
             <div id="mc_embed_shell">
                 <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css" />
