@@ -85,7 +85,7 @@ export default function Login() {
               <h3 className="whitespace-nowrap tracking-tight text-2xl font-bold">Login</h3>
               <h5 
                 onClick={() => setAuthType('signup')}
-                className="text-sm underline"
+                className="text-xs cursor-pointer underline"
               >
                 Sign up instead
               </h5>
@@ -161,7 +161,7 @@ export default function Login() {
               <h3 className="whitespace-nowrap tracking-tight text-2xl font-bold">Sign Up</h3>
               <h5 
                 onClick={() => setAuthType('login')}
-                className="text-sm underline"
+                className="text-xs cursor-pointer underline"
               >
                 Log in instead
               </h5>
@@ -204,14 +204,19 @@ export default function Login() {
               />
             </div>
             <div className="space-y-2">
-              <span className="flex items-center justify-between">
+              <span className="flex items-center justify-between relative">
                 <label
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="password"
                 >
                   Password
                 </label>
-                <BadgeAlert size='18' strokeWidth='1.5' />
+                <BadgeAlert className="peer" size='18' strokeWidth='1.5' />
+                <ul className="hidden peer-hover:block h-15 bg-black text-white px-4 py-2 rounded-lg absolute right-0 top-6">
+                  <li className="text-xs " >- must be at least 8 characters long.</li>
+                  <li className="text-xs " >- must include a number.</li>
+                  <li className="text-xs " >- must include [a]  special character[s] eg. '@, *'</li>
+                </ul>
               </span>
               <input
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"

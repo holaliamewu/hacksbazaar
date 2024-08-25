@@ -5,6 +5,7 @@ import NavBar from "@/components/NavBar";
 import Login from "@/components/Auth";
 import { useAuth } from "@/lib/shared/contexts/SignupContext";
 import StartingAuthModal from "@/components/StartingAuthModal";
+import MyMessage from "@/components/ApologyMessage";
 
 export default function App() {
   const { 
@@ -13,15 +14,16 @@ export default function App() {
               setShowStartingAuthModal 
             } = useAuth();
 
+            // {<Hacks />}
   return (
     <div className="w-[90%] md:w-[50%] mx-auto min-h-screen">
       <Analytics />
       <NavBar />
-      <Hacks />
       {showStartingAuthModal && 
         <StartingAuthModal  />
       }
       {showAuthModal && <Login />}
+      <MyMessage />
     </div>
   );
 }

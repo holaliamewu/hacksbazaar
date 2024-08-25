@@ -21,6 +21,7 @@ export default function Hacks() {
 
     const [ hacks, setHacks ] = useState(hacksData);
     const [ newHackMessage, setNewHackMessage ] = useState('');
+    const [ favFeatureOut, setFavFeatureOut ] = useState(false)
     const { showAuthModal, setShowAuthModal, loggedIn, setLogged } = useAuth()
 
     let uid = 0;
@@ -60,7 +61,7 @@ export default function Hacks() {
                   value={newHackMessage}
                   onChange={handleChange}
                   placeholder="got that hack? pour it here." 
-                  className="h-32 bg-gray-50  resize-none" 
+                  className="h-32 bg-gray-50  resize-none outline-none px-4" 
                   />
                   <button 
                   onClick={storeHackToDB}
@@ -82,9 +83,26 @@ export default function Hacks() {
                     </span>
                     <span className="text-sm ml-7" >{hack.hackmessage}</span>
                     <span className="flex items-center space-x-4 ml-7" >
-                        <span className="flex text-[12px] gap-1" ><ThumbsUp size='16' strokeWidth='1.5' />{hack.upvotes > 0 ? hack.upvotes : ''}</span>
-                        <span className="flex text-[12px] gap-1" ><ThumbsDown size='16' strokeWidth='1.5' />{hack.downvotes > 0 ? hack.downvotes : '' }</span>
-                        <span className="text-[12px] " ><Heart size='16' strokeWidth='1.5' /></span>
+                        <span className="flex text-xs gap-1" >
+                        <ThumbsUp 
+                        onClick={() => setHacks(hacks.map(h => 
+                          h.id === hack.id ? { ...h, upvotes: h.upvotes + 1 } : h
+                        ))}
+                        className="cursor-pointer"
+                        size='16' 
+                        strokeWidth='1.5' 
+                      />
+                      {hack.upvotes > 0 ? hack.upvotes : ''}</span>
+                        <span className="flex text-xs gap-1" >
+                        <ThumbsDown 
+                        onClick={() => setHacks(hacks.map(h => 
+                          h.id === hack.id ? { ...h, downvotes: h.downvotes + 1 } : h
+                        ))}
+                        className="cursor-pointer"
+                        size='16' 
+                        strokeWidth='1.5' 
+                      />{hack.downvotes > 0 ? hack.downvotes : '' }</span>
+                        { favFeatureOut && <span className="text-[12px] " ><Heart size='16' strokeWidth='1.5' /></span>}
                     </span>
 
 
