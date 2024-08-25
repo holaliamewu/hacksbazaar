@@ -1,6 +1,6 @@
 export default function MyMessage() {
     return (
-        <main className="text-md flex flex-col gap-8 my-[50px]">
+        <main className="text-md text-black flex flex-col gap-8 my-[50px]">
             <p className="italic font-bold">TL;DR: Join the waitlist so you don't miss the launch!</p>
             <p className="text-2xl">👋🏼,</p>
             <p>Hey, thanks for making time for Hacksbazaar's first launch. I'm so grateful for this gesture. Seriously.</p>
