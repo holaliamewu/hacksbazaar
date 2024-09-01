@@ -23,21 +23,21 @@ export default function NavBar() {
 
   return (
         <nav className="flex justify-between items-center pt-8 " >
-            <h4 className=" font-bold " >hacksbazaar</h4>
-            <ul className="flex " >
-           { favFeatureOut && <li 
+            <h4 className="flex items-start  font-bold " >hacksbazaar <span className='text-[8px] font-medium bg-black text-white px-[4px] py-[2px] rounded-md '>beta v0.1</span></h4>
+            <ul className="flex space-x-2 " >
+           { loggedIn && <li 
             onClick={ () => { 
             }}
-            className='text-xs cursor-pointer border-transparent hover:bg-zinc-200 active:border-[1px] active:border-zinc-300 py-1 px-2 rounded-full'
-            ><Heart /> favs</li>}
-            <Link 
-            href='/'
-            className=' flex gap-2 text-xs cursor-pointer transition-all  border-transparent hover:bg-zinc-200  active:border-zinc-300 py-1 px-2 rounded-full'
-            ><UserRound size={15} /> <h5 className=' ' >profile</h5></Link>
+            className=' flex gap-2 text-xs cursor-pointer transition-all px-2 py-1 border rounded-full bg-zinc-100  border-transparent hover:bg-zinc-200  active:border-zinc-300 py-1 px-2 rounded-full'
+            ><Heart size={15} /> favs</li>}
+           { loggedIn && <Link 
+            href='/profile'
+            className=' flex gap-2 text-xs cursor-pointer transition-all px-2 py-1 border rounded-full bg-zinc-100  border-transparent hover:bg-zinc-200  active:border-zinc-300 py-1 px-2 rounded-full'
+            ><UserRound size={15} /> <h5 className=' ' >profile</h5></Link>}
             <li 
             onClick={ () => { 
             }}
-            className='group flex gap-2 text-xs cursor-pointer border-transparent hover:bg-zinc-200 active:border-[1px] active:border-zinc-300 py-1 px-2 rounded-full'>{ loggedIn && <LogOut size={15} />} <h5 className='hidden group-hover:block' >{ loggedIn ? 'log out' : 'log in'}</h5></li>
+            className='group flex gap-2 text-xs cursor-pointer border-transparent active:border-[1px] active:border-zinc-300 py-1 px-2 rounded-full'>{ loggedIn ? '' : 'log in'}</li>
             </ul>
         </nav>
   )

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import Link from "next/link"
+import { useAuth } from "@/lib/shared/contexts/SignupContext"
 
 const EMOJI_OPTIONS = ["😊", "😎", "🤓", "🧐", "🤠", "👨‍💻", "👩‍💻", "🦄", "🐱", "🐶"]
 
@@ -11,7 +12,8 @@ export default function Component() {
   const [email, setEmail] = useState("john.doe@example.com")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [emoji, setEmoji] = useState("😊")
+  const {form, setForm} = useAuth();
+  const emoji = form.currentEmoji;
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -32,7 +34,7 @@ export default function Component() {
                 <button
                   key={e}
                   type="button"
-                  onClick={() => setEmoji(e)}
+                  onClick={() => setForm({...form, currentEmoji: e })}
                   className="text-2xl p-2 hover:bg-gray-200 rounded-full transition-colors"
                 >
                   {e}

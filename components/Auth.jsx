@@ -3,7 +3,7 @@
 import { useAuth } from "@/lib/shared/contexts/SignupContext";
 import { AuthenticateAnonymously, LoginWithPassword, SignupWithEmail } from "@/lib/util";
 import { BadgeAlert } from "lucide-react";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { 
   signInAnonymously, 
   onAuthStateChanged, 
@@ -12,19 +12,46 @@ import {
   signOut  
 } from "firebase/auth";
 import { firebaseAuth } from "@/lib/shared/firebase";
+import { getDatabase, ref, set } from "firebase/database";
 
 export default function Login() {
   const [authType, setAuthType] = useState('login');
   const { form, setForm, setShowAuthModal, setLoggedIn } = useAuth();
+  const db = getDatabase();
 
 
-  
-  // Authentication state observer
-   function observeAuthState(setLoggedIn) {
-    onAuthStateChanged(firebaseAuth, (user) => {
-      setLoggedIn(!!user); // Set logged in to true if user exists, false otherwise
-    });
-  }
+function storeDataToDB() {
+  const { fullName, email, password, currentEmoji, role, seenFirstMsg } = form;
+  set(ref(db, 'users/' + userId), {
+      fullName: fullName,
+      email: email,
+      password: password,
+      currentEmoji: currentEmoji,
+      userId: userId,
+      jobRole: role,
+      createdAt: new Date().toISOString(),
+      seenFirstMsg: seenFirstMsg
+  })
+  .then(() => {
+    // Data saved successfully!
+    console.log('data successfully stored to db!')
+  })
+  .catch((error) => {
+    // The write failed...
+    console.log('error saving data to db:', error)
+  });
+}
+
+
+// Authentication state observer
+useEffect(() => {
+  function observeAuthState(setLoggedIn) {
+      onAuthStateChanged(firebaseAuth, (user) => {
+        setLoggedIn(!!user); // Set logged in to true if user exists, false otherwise
+      });
+    }
+},[])
+
   
   // Anonymous Authentication
    function AuthenticateAnonymously(setLoggedIn) {
@@ -42,6 +69,7 @@ export default function Login() {
    function SignupWithEmail() {
     createUserWithEmailAndPassword(firebaseAuth, form.email, form.newPassword)
       .then((userCredential) => {
+        storeDataToDB();
         setLoggedIn(true);
         setShowAuthModal(false)
         console.log('it worked, man!')
@@ -200,6 +228,23 @@ export default function Login() {
                 type="text"
                 name="fullName"
                 value={form.fullName}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <label
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="full-name"
+              >
+                What do you do?
+              </label>
+              <input
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="full-name"
+                type="text"
+                name="role"
+                value={form.role}
+                placeholder="eg. designer"
                 onChange={handleChange}
               />
             </div>

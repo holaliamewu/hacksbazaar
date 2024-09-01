@@ -21,6 +21,7 @@ export default function StartingAuthModal() {
           onClick={ () => {
             setShowStartingAuthModal(false);
             setShowAuthModal(true)
+            setForm({...form, seenFirstMsg: true })
           }}
           className="inline-flex bg-teal-300 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
                 Get Started
@@ -29,6 +30,7 @@ export default function StartingAuthModal() {
           onClick={ () => {
             setShowStartingAuthModal(false) ;
             AuthenticateAnonymously( loggedIn, setLoggedIn );
+            setForm({...form, seenFirstMsg: true })
           }}
           className="inline-flex items-center justify-center border whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
             Keep me anonymous 👽
@@ -37,6 +39,7 @@ export default function StartingAuthModal() {
             <button 
             onClick={ () => {
               setShowStartingAuthModal(false);
+              setForm({...form, seenFirstMsg: true })
             }}
             className="text-xs text-zinc-600 underline" >Stay signed out.</button>
           </span>
