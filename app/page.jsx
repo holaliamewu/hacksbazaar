@@ -18,10 +18,11 @@ export default function App() {
       <Analytics />
       <NavBar />
       <Hacks />
-      {showStartingAuthModal && seenFirstMsg &&
+      {showStartingAuthModal && !seenFirstMsg &&
         <StartingAuthModal  />
       }
       {showAuthModal && <Login />}
     </div>
   );
 }
+//just added this new line just to add a fix.
