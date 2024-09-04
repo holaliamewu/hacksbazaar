@@ -7,7 +7,7 @@ import { database } from '@/lib/shared/firebase';
 export default function Hacks() {
     const [hacks, setHacks] = useState([]);
     const [newHackMessage, setNewHackMessage] = useState('');
-    const { showAuthModal, setShowAuthModal, loggedIn, form } = useAuth();
+    const { setShowAuthModal, loggedIn, form } = useAuth();
     const username = form.fullName;
     const userEmoji = form.currentEmoji;
     const userId = form.userId; // Assuming you have a userId in the form
@@ -143,7 +143,7 @@ export default function Hacks() {
                     />
                     <button 
                         onClick={storeHackToDB}
-                        className="absolute bottom-2 right-2 ml-auto bg-teal-300 text-white text-sm font-semibold shadow-xl shadow-gray-200 rounded-md w-[80px] h-[40px]">
+                        className="absolute bottom-2 right-2 ml-auto bg-teal-700 text-white text-sm font-semibold shadow-xl shadow-gray-200 rounded-md w-[80px] h-[40px]">
                         post!
                     </button>
                 </span>
@@ -158,8 +158,8 @@ export default function Hacks() {
                                 <span className="flex gap-3 items-center">
                                     <span>{userEmoji}</span>
                                     <span className="flex flex-col " >
-                                        <span className="text-xs font-semibold">{hack.username}</span>
-                                        <span className="text-[11px] text-zinc-700">{hack.job}</span>
+                                        <span className="text-sm font-semibold">{hack.username}</span>
+                                        <span className="text-xs text-zinc-700">{hack.job}</span>
                                     </span>
                                 </span>
                                 <span className="text-[10px]">{getTimeAgo(hack.postedAt)}</span>
@@ -189,8 +189,8 @@ export default function Hacks() {
                     ))
                 ) : (
                     <div className="flex flex-col items-center gap-4 text-center text-gray-500">
+                        
                         <p className="" >No hacks available yet.</p>
-                        <button className="bg-teal-300 py-2 px-4 rounded-md text-sm text-white font-medium shadow">New hack</button>
                     </div>
                 )}
             </div>

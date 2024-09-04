@@ -1,11 +1,13 @@
 "use client"
 import { useAuth } from '@/lib/shared/contexts/SignupContext'
+import { signOut } from 'firebase/auth';
 import { Heart, LogOut, UserRound } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react'
+import Image from 'next/image';
+import React from 'react';
 
 export default function NavBar() {
-  const { user, setUser,loggedIn, setLoggedIn, setShowAuthModal, favFeatureOut } = useAuth()
+  const { user, setUser,loggedIn, setLoggedIn, setShowAuthModal } = useAuth()
 
   // Sign-Out
    function Logout(setLoggedIn) {
@@ -23,7 +25,14 @@ export default function NavBar() {
 
   return (
         <nav className="flex justify-between items-center pt-8 " >
-            <h4 className="flex items-start  font-bold " >hacksbazaar <span className='text-[8px] font-medium bg-black text-white px-[4px] py-[2px] rounded-md '>beta v0.1</span></h4>
+            <h4 className="flex items-start  font-bold " >
+            <Image 
+              src="/hacksbazaar-logo-short.png"              
+              alt="logo.hacksbazaar"
+              width="30"
+              height="50"
+            />
+            <span className='text-[7px] font-medium bg-black text-white px-[4px] py-[2px] -ml-3 -mt-3 rounded-md '>beta v0.1</span></h4>
             <ul className="flex space-x-2 " >
            { loggedIn && <li 
             onClick={ () => { 
@@ -34,10 +43,18 @@ export default function NavBar() {
             href='/profile'
             className=' flex gap-2 text-xs cursor-pointer transition-all px-2 py-1 border rounded-full bg-zinc-100  border-transparent hover:bg-zinc-200  active:border-zinc-300 py-1 px-2 rounded-full'
             ><UserRound size={15} /> <h5 className=' ' >profile</h5></Link>}
-            <li 
+            { !loggedIn && <li 
             onClick={ () => { 
+              setShowAuthModal(true)
             }}
-            className='group flex gap-2 text-xs cursor-pointer border-transparent active:border-[1px] active:border-zinc-300 py-1 px-2 rounded-full'>{ loggedIn ? '' : 'log in'}</li>
+            className='group flex gap-2 text-xs cursor-pointer border-transparent active:border-[1px] active:border-zinc-300 py-1 px-2 rounded-full'>log in</li>
+          }
+            { loggedIn && <li 
+            onClick={ () => { 
+              signOut
+                        }}
+            className='group flex gap-2 text-xs cursor-pointer border-transparent active:border-[1px] active:border-zinc-300 py-1 px-2 rounded-full'>log out</li>
+          }
             </ul>
         </nav>
   )

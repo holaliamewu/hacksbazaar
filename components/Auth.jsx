@@ -1,98 +1,92 @@
-'use client'
+'use client';
 
 import { useAuth } from "@/lib/shared/contexts/SignupContext";
-import { AuthenticateAnonymously, LoginWithPassword, SignupWithEmail } from "@/lib/util";
-import { BadgeAlert } from "lucide-react";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { 
   signInAnonymously, 
   onAuthStateChanged, 
   createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signOut  
+  signInWithEmailAndPassword
 } from "firebase/auth";
 import { firebaseAuth } from "@/lib/shared/firebase";
 import { getDatabase, ref, set } from "firebase/database";
 
-export default function Login() {
+export default function AuthForm() {
+
   const [authType, setAuthType] = useState('login');
-  const { form, setForm, setShowAuthModal, setLoggedIn } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { form, setForm, setShowAuthModal, setLoggedIn, setShowStartingAuthModal } = useAuth();
   const db = getDatabase();
 
+  // Authentication state observer
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
+      setLoading(false); // Set loading to false once the state is known
 
-function storeDataToDB() {
-  const { fullName, email, password, currentEmoji, role, seenFirstMsg } = form;
-  set(ref(db, 'users/' + userId), {
-      fullName: fullName,
-      email: email,
-      password: password,
-      currentEmoji: currentEmoji,
-      userId: userId,
+      if (user) {
+        const uid = user.uid;
+        setLoggedIn(true);
+        setShowStartingAuthModal(false);
+        setForm((prevForm) => ({ ...prevForm, userId: uid }));
+      } else {
+        setLoggedIn(false);
+        setShowStartingAuthModal(true);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [setForm, setLoggedIn, setShowStartingAuthModal]);
+
+  function storeDataToDB(userId) {
+    const { fullName, email, currentEmoji, role } = form;
+    set(ref(db, 'users/' + userId), {
+      fullName,
+      email,
+      currentEmoji,
+      userId,
       jobRole: role,
       createdAt: new Date().toISOString(),
-      seenFirstMsg: seenFirstMsg
-  })
-  .then(() => {
-    // Data saved successfully!
-    console.log('data successfully stored to db!')
-  })
-  .catch((error) => {
-    // The write failed...
-    console.log('error saving data to db:', error)
-  });
-}
-
-
-// Authentication state observer
-useEffect(() => {
-  function observeAuthState(setLoggedIn) {
-      onAuthStateChanged(firebaseAuth, (user) => {
-        setLoggedIn(!!user); // Set logged in to true if user exists, false otherwise
-      });
-    }
-},[])
-
-  
-  // Anonymous Authentication
-   function AuthenticateAnonymously(setLoggedIn) {
-    signInAnonymously(firebaseAuth)
-      .then(() => {
-        setLoggedIn(true);
-      })
-      .catch((error) => {
-        console.error(error.code, error.message);
-        setLoggedIn(false);
-      });
+    })
+    .then(() => {
+      console.log('Data successfully stored to DB!');
+    })
+    .catch((error) => {
+      console.log('Error saving data to DB:', error);
+    });
   }
+
   
   // Email Sign-Up
-   function SignupWithEmail() {
+  function SignupWithEmail() {
     createUserWithEmailAndPassword(firebaseAuth, form.email, form.newPassword)
       .then((userCredential) => {
-        storeDataToDB();
+        const userId = userCredential.user.uid;
+        storeDataToDB(userId);
         setLoggedIn(true);
-        setShowAuthModal(false)
-        console.log('it worked, man!')
+        setShowAuthModal(false);
+        console.log('Signup successful!');
       })
       .catch((error) => {
         console.error(error.code, error.message);
         setLoggedIn(false);
-        console.log('we got a problem here')
+        console.log('Signup failed');
       });
   }
-  
+
   // Email Sign-In
-   function LoginWithPassword() {
+  function LoginWithPassword() {
     signInWithEmailAndPassword(firebaseAuth, form.email, form.password)
       .then((userCredential) => {
         setLoggedIn(true);
+        const userId = userCredential.user.uid;
+        console.log('Login successful!');
+        // Fetch user data or perform additional actions here if needed
       })
       .catch((error) => {
         console.error(error.code, error.message);
         setLoggedIn(false);
       });
   }
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -163,21 +157,13 @@ useEffect(() => {
               onClick={(e) => {
                 e.preventDefault();
                 LoginWithPassword();
+                setShowAuthModal(false)
               }}
-              className="inline-flex bg-blue-300 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+              className="inline-flex bg-teal-700 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
             >
               Login
             </button>
-            <button 
-              onClick={(e) => {
-                e.preventDefault();
-                AuthenticateAnonymously();
-                setShowAuthModal(false);
-              }}
-              className="inline-flex items-center justify-center border whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
-            >
-              Keep me anonymous 👽
-            </button>
+           
           </div>
         </form>
       ) : (
@@ -187,12 +173,12 @@ useEffect(() => {
           <div className="flex flex-col space-y-1.5 p-6">
             <div className="flex justify-between items-center">
               <h3 className="whitespace-nowrap tracking-tight text-2xl font-bold">Sign Up</h3>
-              <h5 
+              <button 
                 onClick={() => setAuthType('login')}
                 className="text-xs cursor-pointer underline"
               >
                 Log in instead
-              </h5>
+              </button>
             </div>
             <p className="text-sm text-muted-foreground">Enter your details to get started.</p>
           </div>
@@ -206,7 +192,6 @@ useEffect(() => {
               </label>
               <input
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                id="email"
                 placeholder="m@example.com"
                 required
                 type="email"
@@ -218,54 +203,28 @@ useEffect(() => {
             <div className="space-y-2">
               <label
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor="full-name"
+                htmlFor="password"
               >
-                Full Name
+                Password
               </label>
               <input
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                id="full-name"
-                type="text"
-                name="fullName"
-                value={form.fullName}
+                required
+                type="password"
+                name="password"
+                value={form.password}
                 onChange={handleChange}
               />
             </div>
             <div className="space-y-2">
               <label
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                htmlFor="full-name"
+                htmlFor="newPassword"
               >
-                What do you do?
+                Confirm Password
               </label>
               <input
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                id="full-name"
-                type="text"
-                name="role"
-                value={form.role}
-                placeholder="eg. designer"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="space-y-2">
-              <span className="flex items-center justify-between relative">
-                <label
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  htmlFor="password"
-                >
-                  Password
-                </label>
-                <BadgeAlert className="peer" size='18' strokeWidth='1.5' />
-                <ul className="hidden peer-hover:block h-15 bg-black text-white px-4 py-2 rounded-lg absolute right-0 top-6">
-                  <li className="text-xs " >- must be at least 8 characters long.</li>
-                  <li className="text-xs " >- must include a number.</li>
-                  <li className="text-xs " >- must include [a]  special character[s] eg. '@, *'</li>
-                </ul>
-              </span>
-              <input
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                id="new-password"
                 required
                 type="password"
                 name="newPassword"
@@ -274,22 +233,21 @@ useEffect(() => {
               />
             </div>
           </div>
-          <span className="flex w-[90%] max-w-md mx-auto text-xs">
-            By signing up, I accept hacksbazaar&#39;s terms and conditions.
-          </span>
-          <div className="flex items-center p-6">
+          <div className="flex flex-col space-y-3 items-center p-6">
             <button 
               onClick={(e) => {
                 e.preventDefault();
                 SignupWithEmail();
+                setShowAuthModal(false)
               }}
-              className="inline-flex items-center justify-center bg-blue-300 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+              className="inline-flex bg-teal-700 text-white items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
             >
-              Sign Up
+              Sign up
             </button>
           </div>
         </form>
       )}
     </div>
-  );
+  )
 }
+

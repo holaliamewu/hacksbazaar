@@ -1,97 +1,82 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { EyeIcon, EyeOffIcon } from "lucide-react"
-import Link from "next/link"
-import { useAuth } from "@/lib/shared/contexts/SignupContext"
+import { useState } from 'react'
+import { Avatar, Button, Card, Divider, Text, Spacer, Image, Grid, Link } from '@geist-ui/core'
+import { MessageCircle, Repeat, Heart, Share, Briefcase } from '@geist-ui/icons'
+import { useAuth } from '@/lib/shared/contexts/SignupContext';
 
-const EMOJI_OPTIONS = ["😊", "😎", "🤓", "🧐", "🤠", "👨‍💻", "👩‍💻", "🦄", "🐱", "🐶"]
-
-export default function Component() {
-  const [name, setName] = useState("John Doe")
-  const [email, setEmail] = useState("john.doe@example.com")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const {form, setForm} = useAuth();
-  const emoji = form.currentEmoji;
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("Profile updated:", { name, email, password, emoji })
+export default function ProfilePage() {
+  const user = {
+    name: "Jane Smith",
+    role: "designer",
+    bio: "building hacksbazaar on the side.",
+    avatar: "",
+    stats: {
+      posts: 2
+    },
   }
 
+  const { form } = useAuth();
+
+const userEmoji = form.currentEmoji;
+
+  const [ hacks, setHacks ] = useState([])
+
   return (
-    <div className="w-full max-w-md mx-auto p-4 ">
-      <div className="text-xl font-bold text-center mb-4">Edit Profile</div>
-      <Link href='..'
-      className="text-sm px-4 py-2 border rounded-full bg-zinc-100" >back</Link>
-      <form onSubmit={handleSubmit}>
-        <div className="space-y-6 py-8">
-          <div className="flex flex-col items-center space-y-4">
-            <div className="text-6xl">{emoji}</div>
-            <div className="flex flex-wrap justify-center gap-2">
-              {EMOJI_OPTIONS.map((e) => (
-                <button
-                  key={e}
-                  type="button"
-                  onClick={() => setForm({...form, currentEmoji: e })}
-                  className="text-2xl p-2 hover:bg-gray-200 rounded-full transition-colors"
-                >
-                  {e}
-                </button>
-              ))}
+    <div className="max-w-2xl mx-auto p-4">
+      <div className="relative">
+        { user.avatar.length > 1 ? 
+            <Avatar src={user.avatar} alt={user.name} className="absolute bottom-0 left-4 transform translate-y-1/2" size="large" isSquare />
+            : <span className=" border rounded p-1  transform translate-y-2/3 text-2xl" >{userEmoji}</span> }
+      </div>
+      <div className="mt-4">
+        <div className="flex justify-between items-center">
+          <div>
+            <Text h1 className="text-lg font-bold">{user.name}</Text>
+            <div className='flex space-x-1' >
+                <Briefcase color="gray" size={14} inline w={.35} />
+                <Text type="secondary" className="text-gray-500 text-xs">{user.role}</Text>
             </div>
           </div>
-          <div className="space-y-2">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-            <input
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your full name"
-              className="w-full px-3 py-2 border rounded-md"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email address"
-              className="w-full px-3 py-2 border rounded-md"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-            <div className="relative">
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                className="w-full px-3 py-2 border rounded-md"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
-              >
-                {showPassword ? (
-                  <EyeOffIcon className="h-4 w-4 text-gray-500" />
-                ) : (
-                  <EyeIcon className="h-4 w-4 text-gray-500" />
-                )}
-              </button>
-            </div>
-          </div>
+          <Link href="/editprofile" >
+            <Button scale={0.5} auto>Edit profile</Button>
+          </Link>
         </div>
-        <div className="mt-6">
-          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded-md">Save Changes</button>
+        <Text className="mt-2 text-sm">{user.bio}</Text>
+        <div className="flex gap-4 mt-4 text-xs text-gray-500">
+          <span>{user.stats.posts} hacks</span>
         </div>
-      </form>
+      </div>
+      <Spacer y={2} />
+      <Divider />
+      <Text h2 className="text-sm font-semibold mb-4">Your Hacks</Text>
+      <Grid.Container gap={2} justify="center">
+        {hacks.map((post) => (
+          <Grid xs={24} key={post.id}>
+            <Card shadow>
+              <Card.Content>
+                <div className="flex items-center">
+                  <Avatar src={user.avatar} alt={user.name} size="small" isSquare className="mr-2" />
+                  <div>
+                    <Text b>{user.name}</Text>
+                    <Text small type="secondary">{user.role}</Text>
+                  </div>
+                </div>
+                <Text className="mt-4">{post.content}</Text>
+              </Card.Content>
+              <Divider y={1} />
+              <Card.Footer>
+                <div className="flex justify-between w-full text-gray-500">
+                  <Button auto scale={0.8} iconRight={<MessageCircle />} size="mini">{post.comments}</Button>
+                  <Button auto scale={0.8} iconRight={<Repeat />} size="mini">{post.retweets}</Button>
+                  <Button auto scale={0.8} iconRight={<Heart />} size="mini" className="text-red-500">{post.likes}</Button>
+                  <Button auto scale={0.8} iconRight={<Share />} size="mini" />
+                </div>
+              </Card.Footer>
+            </Card>
+          </Grid>
+        ))}
+      </Grid.Container>
     </div>
   )
 }
