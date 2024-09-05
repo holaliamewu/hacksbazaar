@@ -99,7 +99,7 @@ export default function AuthForm() {
   return (
     <div
     onClick={ (e) => {
-      e.preventDefault()
+      e.stopPropagation()
       setShowAuthModal(false)
     }}
     className="flex absolute top-0 left-0 items-center justify-center w-full min-h-screen backdrop-blur-sm">
@@ -160,7 +160,7 @@ export default function AuthForm() {
           <div className="flex flex-col space-y-3 items-center p-6">
             <button 
               onClick={(e) => {
-                e.preventDefault();
+                e.stopPropagation();
                 LoginWithPassword();
                 setShowAuthModal(false)
               }}

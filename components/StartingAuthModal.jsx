@@ -23,7 +23,7 @@ export default function StartingAuthModal() {
   return (
     <div 
     onClick={ (e) => {
-      e.preventDefault();
+      e.stopPropagation();
       setShowStartingAuthModal(false);
     }
     }
