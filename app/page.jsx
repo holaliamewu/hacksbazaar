@@ -15,7 +15,7 @@ export default function App() {
   } = useAuth();
 
   return (
-    <div className="w-[90%] md:w-[50%] mx-auto min-h-screen">
+    <div className="w-[90%] text-black md:w-[50%] mx-auto min-h-screen">
     <GeistProvider>
         <Analytics />
         <NavBar />
