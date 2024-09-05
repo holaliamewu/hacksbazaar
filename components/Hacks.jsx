@@ -3,6 +3,7 @@ import { Heart, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ref, set, push, onValue, serverTimestamp, update } from "firebase/database";
 import { database } from '@/lib/shared/firebase';
+import { Spinner } from 'geist-ui/icons';
 
 export default function Hacks() {
     const [hacks, setHacks] = useState([]);
@@ -189,8 +190,7 @@ export default function Hacks() {
                     ))
                 ) : (
                     <div className="flex flex-col items-center gap-4 text-center text-gray-500">
-                        
-                        <p className="" >No hacks available yet.</p>
+                        <Spinner />
                     </div>
                 )}
             </div>

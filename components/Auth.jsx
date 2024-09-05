@@ -205,7 +205,10 @@ export default function AuthForm() {
             <div className="flex justify-between items-center">
               <h3 className="whitespace-nowrap tracking-tight text-2xl font-bold">Sign Up</h3>
               <button 
-                onClick={() => setAuthType('login')}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setAuthType('login')
+                }}
                 className="text-xs cursor-pointer underline"
               >
                 Log in instead
