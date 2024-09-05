@@ -10,6 +10,7 @@ import {
 } from "firebase/auth";
 import { firebaseAuth } from "@/lib/shared/firebase";
 import { getDatabase, ref, set } from "firebase/database";
+import { Button } from 'geist-ui/core';
 
 export default function AuthForm() {
   const [authType, setAuthType] = useState('login');
@@ -128,7 +129,11 @@ export default function AuthForm() {
             <div className="flex justify-between items-center">
               <h3 className="whitespace-nowrap tracking-tight text-2xl font-bold">Login</h3>
               <h5 
-                onClick={() => setAuthType('signup')}
+                onClick={(e) =>{
+                  e.stopPropagation()
+                  setAuthType('signup')
+                } 
+              }
                 className="text-xs cursor-pointer underline"
               >
                 Sign up instead
@@ -176,7 +181,7 @@ export default function AuthForm() {
           </div>
           <div className="flex flex-col space-y-3 items-center p-6">
             {loading ? (
-              <div>Loading...</div> // Replace with a spinner or other loading indicator
+              <Button loading type="success" >Sign up</Button>
             ) : (
               <button 
                 type="submit"
@@ -261,7 +266,7 @@ export default function AuthForm() {
           </div>
           <div className="flex flex-col space-y-3 items-center p-6">
             {loading ? (
-              <div>Loading...</div> // Replace with a spinner or other loading indicator
+              <Button loading type="success" >Sign up</Button>
             ) : (
               <button 
                 type="submit"
