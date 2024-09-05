@@ -21,7 +21,13 @@ export default function StartingAuthModal() {
   }
 
   return (
-    <div className="flex absolute top-0 left-0 items-center justify-center w-full min-h-screen backdrop-blur-sm">
+    <div 
+    onClick={ (e) => {
+      e.preventDefault();
+      setShowStartingAuthModal(false);
+    }
+    }
+    className="flex absolute top-0 left-0 items-center justify-center w-full min-h-screen backdrop-blur-sm">
       <div className="flex flex-col space-y-6 rounded-lg border backdrop-blur-3xl bg-white/[.7] bg-card text-card-foreground shadow-sm w-[90%] max-w-sm p-6">
         <h1 className="text-2xl font-bold">
           Hey, thanks for hopping on <span className="border-b-4 border-teal-700">hacksbazaar!🎉</span>

@@ -97,10 +97,15 @@ export default function AuthForm() {
   };
 
   return (
-    <div className="flex absolute top-0 left-0 items-center justify-center w-full min-h-screen backdrop-blur-sm">
+    <div
+    onClick={ (e) => {
+      e.preventDefault()
+      setShowAuthModal(false)
+    }}
+    className="flex absolute top-0 left-0 items-center justify-center w-full min-h-screen backdrop-blur-sm">
       {authType === 'login' ? (
         <form
-          className="rounded-lg border backdrop-blur-3xl bg-white/[.7] bg-card text-card-foreground shadow-sm w-[90%] max-w-md p-6 space-y-4"
+          className="rounded-lg border backdrop-blur-3x mg:bg-white bg-white/[.7] bg-card text-card-foreground shadow-sm w-[90%] max-w-md p-6 space-y-4"
         >
           <div className="flex flex-col space-y-1.5 p-6">
             <div className="flex justify-between items-center">
@@ -159,7 +164,7 @@ export default function AuthForm() {
                 LoginWithPassword();
                 setShowAuthModal(false)
               }}
-              className="inline-flex bg-teal-700 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+              className="inline-flex bg-teal-700 text-white font-bold items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
             >
               Login
             </button>
