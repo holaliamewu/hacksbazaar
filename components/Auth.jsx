@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { firebaseAuth } from "@/lib/shared/firebase";
 import { getDatabase, ref, set } from "firebase/database";
-import { Button } from 'geist-ui/core';
+import { Button } from '@geist-ui/core';
 
 export default function AuthForm() {
   const [authType, setAuthType] = useState('login');
