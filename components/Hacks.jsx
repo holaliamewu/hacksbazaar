@@ -3,7 +3,7 @@ import { Heart, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ref, set, push, onValue, serverTimestamp, update } from "firebase/database";
 import { database } from '@/lib/shared/firebase';
-import { Spinner } from '@geist-ui/icons';
+import { Spinner } from '@geist-ui/core';
 
 export default function Hacks() {
     const [hacks, setHacks] = useState([]);
