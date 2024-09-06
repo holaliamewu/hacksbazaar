@@ -119,6 +119,7 @@ export default function AuthForm() {
     >
       {authType === 'login' ? (
         <form
+        onClick={(e) => e.stopPropagation()}
           onSubmit={(e) => {
             e.preventDefault();
             LoginWithPassword();
@@ -195,6 +196,7 @@ export default function AuthForm() {
         </form>
       ) : (
         <form
+          onClick={(e) => e.stopPropagation()}
           onSubmit={(e) => {
             e.preventDefault();
             SignupWithEmail();
