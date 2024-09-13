@@ -24,7 +24,7 @@ export default function Component() {
   return (
     <div className="w-full max-w-md mx-auto p-4 ">
       <div className="text-xl font-bold text-center mb-4">Edit Profile</div>
-      <Link href='..' ><Button scale={0.5}>Back</Button></Link>
+      <Link href='..' className="text-xs border rounded px-2 py-1" >Back</Link>
       <form onSubmit={handleSubmit}>
         <div className="space-y-6 py-8">
           <div className="flex flex-col items-center space-y-4">
@@ -89,7 +89,7 @@ export default function Component() {
           </div>
         </div>
         <div className="mt-6">
-          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded-md">Save Changes</button>
+          <button type="submit" className="w-full px-4 py-2 bg-teal-700 text-white rounded-md">Save Changes</button>
         </div>
       </form>
     </div>

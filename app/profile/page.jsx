@@ -39,7 +39,7 @@ const userEmoji = form.currentEmoji;
             </div>
           </div>
           <Link href="/editprofile" >
-            <Button scale={0.5} auto>Edit profile</Button>
+            <button className='text-xs p-1 rounded border '>Edit profile</button>
           </Link>
         </div>
         <Text className="mt-2 text-sm">{user.bio}</Text>

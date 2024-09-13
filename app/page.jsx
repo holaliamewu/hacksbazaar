@@ -14,6 +14,7 @@ export default function App() {
     form,
   } = useAuth();
 
+
   return (
     <div className="w-[90%] text-black md:w-[50%] mx-auto min-h-screen">
     <GeistProvider>

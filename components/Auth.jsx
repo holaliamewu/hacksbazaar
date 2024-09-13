@@ -182,7 +182,7 @@ export default function AuthForm() {
           </div>
           <div className="flex flex-col space-y-3 items-center p-6">
             {loading ? (
-              <Button loading type="success" >Sign up</Button>
+              <Button loading type="success" >Log in</Button>
             ) : (
               <button 
                 type="submit"
