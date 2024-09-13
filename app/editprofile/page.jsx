@@ -22,7 +22,7 @@ export default function Component() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 ">
+    <div className="w-full max-w-md mx-auto p-4 text-black ">
       <div className="text-xl font-bold text-center mb-4">Edit Profile</div>
       <Link href='..' className="text-xs border rounded px-2 py-1" >Back</Link>
       <form onSubmit={handleSubmit}>
