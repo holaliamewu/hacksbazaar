@@ -5,7 +5,7 @@ import { Avatar, Button, Card, Divider, Text, Spacer, Image, Grid, Link } from '
 import { MessageCircle, Repeat, Heart, Share, Briefcase } from '@geist-ui/icons';
 import { useAuth } from '@/lib/shared/contexts/SignupContext';
 import EditProfile from '@/components/EditProfile';
-import { AtSign } from 'lucide-react';
+import { AtSign, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { getDatabase, ref, onValue } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from '@/lib/shared/firebase'
