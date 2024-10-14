@@ -11,13 +11,12 @@ export default function Component() {
   const currentEmoji = form.currentEmoji
   return (
     <div className="w-full max-w-md mx-auto p-4 text-black ">
-      <div className="text-xl font-bold text-center mb-4">Favourites❤</div>
+      <div className="text-xl font-bold text-center mb-4">Favourites</div>
       <span className="flex items-center justify-between" >
-      <Link href='..' className="text-xs border rounded px-2 py-1 " >Back</Link>
-      <Link href='/profile' className="text-lg border rounded px-2 py-1 " >{currentEmoji}</Link>
       </span>
       <section className="pt-8" >
-        <p className="text-sm text-center" >No favourite here.<br/> Like a hack to see them here.</p>
+        <p className="text-center italic" >coming soon🙂...</p>
+        {/* <p className="text-sm text-center" >Not a single thing here.<br/> Like a hack to see them here.</p> */}
       </section>
     </div>
   )

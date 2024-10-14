@@ -3,32 +3,36 @@
 import { useAuth } from "@/lib/shared/contexts/SignupContext";
 import { useEffect, useState } from "react";
 import { 
-  signInAnonymously, 
   onAuthStateChanged, 
   createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword 
 } from "firebase/auth";
 import { firebaseAuth } from "@/lib/shared/firebase";
 import { getDatabase, ref, set } from "firebase/database";
 import { Button } from '@geist-ui/core';
+import { AlertTriangle } from "lucide-react";
 
 export default function AuthForm() {
   const [authType, setAuthType] = useState('login');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null); // Error state for handling authentication errors
+  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const { form, setForm, setShowAuthModal, setLoggedIn, setShowStartingAuthModal } = useAuth();
   const db = getDatabase();
 
   // Authentication state observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
-      setLoading(false); // Set loading to false once the state is known
+      setLoading(false); 
 
       if (user) {
-        const uid = user.uid;
         setLoggedIn(true);
+        setForm((prevForm) => ({
+          ...prevForm,
+          email: user.email,   // Set email from the user object
+          userId: user.uid     // Capture the userId from the authenticated user
+        }));
         setShowStartingAuthModal(false);
-        setForm((prevForm) => ({ ...prevForm, userId: uid }));
       } else {
         setLoggedIn(false);
         setShowStartingAuthModal(true);
@@ -38,14 +42,16 @@ export default function AuthForm() {
     return () => unsubscribe();
   }, [setForm, setLoggedIn, setShowStartingAuthModal]);
 
+  // Store data to database
   function storeDataToDB(userId) {
-    const { fullName, email, currentEmoji, role } = form;
+    const { fullName, userName, email, currentEmoji, profilePhoto } = form;
     set(ref(db, 'users/' + userId), {
       fullName,
+      userName,
       email,
       currentEmoji,
+      profilePhoto,
       userId,
-      jobRole: role,
       createdAt: new Date().toISOString(),
     })
     .then(() => {
@@ -63,7 +69,15 @@ export default function AuthForm() {
 
     createUserWithEmailAndPassword(firebaseAuth, form.email, form.newPassword)
       .then((userCredential) => {
-        const userId = userCredential.user.uid;
+        const userId = userCredential.user.uid; // Get the userId from Firebase after sign-up
+
+        // Update the form data with the new user's id
+        setForm((prevForm) => ({
+          ...prevForm,
+          userId
+        }));
+
+        // Store user data to the database
         storeDataToDB(userId);
         setLoggedIn(true);
         setShowAuthModal(false);
@@ -71,7 +85,18 @@ export default function AuthForm() {
       })
       .catch((error) => {
         console.error(error.code, error.message);
-        setError('Signup failed: ' + error.message);
+        setError(error.code);
+        setErrorMessage(
+          error.code === 'auth/email-already-in-use'
+            ? "Account with this email exists already."
+            : error.code === "auth/invalid-email"
+            ? "Email format is wrong."
+            : error.code === "auth/weak-password"
+            ? "Create a stronger password. A two-year old can guess this. lol."
+            : error.code === "auth/too-many-requests"
+            ? "Our systems are under pressure. Try again after some time."
+            : null
+        );
         setLoggedIn(false);
       })
       .finally(() => {
@@ -86,14 +111,30 @@ export default function AuthForm() {
 
     signInWithEmailAndPassword(firebaseAuth, form.email, form.password)
       .then((userCredential) => {
+        const userId = userCredential.user.uid; // Get the userId from Firebase after sign-in
+
+        // Update the form data with the logged-in user's id
+        setForm((prevForm) => ({
+          ...prevForm,
+          userId,
+          email: userCredential.user.email
+        }));
+
         setLoggedIn(true);
-        const userId = userCredential.user.uid;
         console.log('Login successful!');
-        // Fetch user data or perform additional actions here if needed
       })
       .catch((error) => {
         console.error(error.code, error.message);
-        setError('Login failed: ' + error.message);
+        setError(error.code);
+        setErrorMessage(
+          error.code === "auth/user-not-found"
+            ? "There's no account associated with this credentials."
+            : error.code === "auth/wrong-password"
+            ? "Password is wrong."
+            : error.code === "auth/invalid-email"
+            ? "Email format is wrong"
+            : null
+        );
         setLoggedIn(false);
       })
       .finally(() => {
@@ -124,17 +165,16 @@ export default function AuthForm() {
             e.preventDefault();
             LoginWithPassword();
           }}
-          className="rounded-lg border backdrop-blur-3xl bg-white/[.7] bg-card text-card-foreground shadow-sm w-[90%] max-w-md p-6 space-y-4"
+          className="rounded-lg border bg-white bg-card text-card-foreground shadow-sm w-[90%] max-w-md p-6 space-y-4"
         >
           <div className="flex flex-col space-y-1.5 p-6">
             <div className="flex justify-between items-center">
               <h3 className="whitespace-nowrap tracking-tight text-2xl font-bold">Login</h3>
               <h5 
                 onClick={(e) =>{
-                  e.stopPropagation()
-                  setAuthType('signup')
-                } 
-              }
+                  e.stopPropagation();
+                  setAuthType('signup');
+                }}
                 className="text-xs cursor-pointer underline"
               >
                 Sign up instead
@@ -144,10 +184,7 @@ export default function AuthForm() {
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-2">
-              <label
-                className="text-sm font-medium leading-none"
-                htmlFor="email"
-              >
+              <label className="text-sm font-medium leading-none" htmlFor="email">
                 Email
               </label>
               <input
@@ -159,12 +196,10 @@ export default function AuthForm() {
                 value={form.email}
                 onChange={handleChange}
               />
+              {error && <p className=""><AlertTriangle /> {errorMessage}</p>}
             </div>
             <div className="space-y-2">
-              <label
-                className="text-sm font-medium leading-none"
-                htmlFor="password"
-              >
+              <label className="text-sm font-medium leading-none" htmlFor="password">
                 Password
               </label>
               <input
@@ -175,6 +210,7 @@ export default function AuthForm() {
                 value={form.password}
                 onChange={handleChange}
               />
+              {error && <p className=""><AlertTriangle /> {errorMessage}</p>}
             </div>
             <span className="block text-xs underline pt-2">
               Forgot password
@@ -182,7 +218,7 @@ export default function AuthForm() {
           </div>
           <div className="flex flex-col space-y-3 items-center p-6">
             {loading ? (
-              <Button loading type="success" >Log in</Button>
+              <Button loading type="success">Log in</Button>
             ) : (
               <button 
                 type="submit"
@@ -201,29 +237,52 @@ export default function AuthForm() {
             e.preventDefault();
             SignupWithEmail();
           }}
-          className="rounded-lg border backdrop-blur-3xl bg-white/[.7] bg-card text-card-foreground shadow-sm w-full max-w-md p-6 space-y-4"
+          className="rounded-lg border bg-white bg-card text-card-foreground shadow-sm w-full max-w-md p-6 space-y-4"
         >
           <div className="flex flex-col space-y-1.5 p-6">
             <div className="flex justify-between items-center">
               <h3 className="whitespace-nowrap tracking-tight text-2xl font-bold">Sign Up</h3>
               <button 
                 onClick={(e) => {
-                  e.stopPropagation()
-                  setAuthType('login')
+                  e.stopPropagation();
+                  setAuthType('login');
                 }}
                 className="text-xs cursor-pointer underline"
               >
                 Log in instead
               </button>
             </div>
-            <p className="text-sm text-muted-foreground">Enter your details to get started.</p>
+            <p className="text-sm text-muted-foreground">Enter your details to create an account.</p>
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-2">
-              <label
-                className="text-sm font-medium leading-none"
-                htmlFor="email"
-              >
+              <label className="text-sm font-medium leading-none" htmlFor="fullName">
+                Full Name
+              </label>
+              <input
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                required
+                type="text"
+                name="fullName"
+                value={form.fullName}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none" htmlFor="userName">
+                Username
+              </label>
+              <input
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                required
+                type="text"
+                name="userName"
+                value={form.userName}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none" htmlFor="email">
                 Email
               </label>
               <input
@@ -237,27 +296,8 @@ export default function AuthForm() {
               />
             </div>
             <div className="space-y-2">
-              <label
-                className="text-sm font-medium leading-none"
-                htmlFor="password"
-              >
+              <label className="text-sm font-medium leading-none" htmlFor="password">
                 Password
-              </label>
-              <input
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                required
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="space-y-2">
-              <label
-                className="text-sm font-medium leading-none"
-                htmlFor="newPassword"
-              >
-                Confirm Password
               </label>
               <input
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -267,17 +307,18 @@ export default function AuthForm() {
                 value={form.newPassword}
                 onChange={handleChange}
               />
+              {error && <p className=""><AlertTriangle /> {errorMessage}</p>}
             </div>
           </div>
           <div className="flex flex-col space-y-3 items-center p-6">
             {loading ? (
-              <Button loading type="success" >Sign up</Button>
+              <Button loading type="success">Sign Up</Button>
             ) : (
               <button 
                 type="submit"
-                className="inline-flex bg-teal-700 text-white items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-primary/90 h-10 px-4 py-2 w-full"
+                className="inline-flex bg-teal-700 text-white font-bold items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:bg-primary/90 h-10 px-4 py-2 w-full"
               >
-                Sign up
+                Sign Up
               </button>
             )}
             {error && <p className="text-sm text-red-600">{error}</p>}
