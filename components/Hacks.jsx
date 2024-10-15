@@ -53,11 +53,13 @@ export default function Hacks() {
                 .catch((error) => {
                     console.error("Error saving hack to Firebase:", error);
                 });
+            setNewHackMessage(""); // Clear the message only if successfully logged in
         } else if (newHackMessage.length > 0 && !loggedIn) {
-            setShowAuthModal(true);
+            setShowAuthModal(true); // Show auth modal
+            return; // Prevent the rest of the function from executing
         }
-        setNewHackMessage("");
     };
+    
 
     // Function to handle favouriting (liking) without counting total likes
     const handleFavorite = (hackId, votes) => {
@@ -172,12 +174,12 @@ export default function Hacks() {
                     hacks.slice().reverse().map(hack => (
                         <div 
                             key={hack.id}
-                            className="flex flex-col mx-auto min-w-[90%] md:min-w-[540px] space-y-3 border rounded-md p-3 md:w-md">
+                            className="flex flex-col mx-auto min-w-full md:min-w-[540px] space-y-3 border rounded-md p-3 md:w-md">
                             <span className="flex justify-between">
                                 <span className="flex gap-3 items-center">
-                                    <span>{userEmoji}</span>
+                                    <span text-lg>{userEmoji}</span>
                                     <span className="flex flex-col">
-                                        <span className="text-sm font-semibold">{hack.name}</span>
+                                        <span className="text-sm font-bold">{hack.name}</span>
                                         <span className="text-[10px]">{getTimeAgo(hack.postedAt)}</span>
                                     </span>
                                 </span>
@@ -186,7 +188,7 @@ export default function Hacks() {
                             <span className="text-sm ml-7">
                                 {hack.hackmessage}
                             </span>
-                            <span className="flex gap-4 text-gray-600">
+                            <span className="flex gap-4 text-gray-600 ml-7">
                                 <span className="flex text-xs gap-1">
                                     <ThumbsUp 
                                         size='16' 
