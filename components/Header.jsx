@@ -28,7 +28,7 @@ export default function Header() {
                   v0.1
                 </h3>
               </span>
-            { !loggedIn && <span className="text-xs w-1/3">log in</span> }
+            { !loggedIn && <span onClick={ ()=> setShowAuthModal(true)} className="text-xs w-1/3">log in</span> }
             <Link href='/feedback' className="fixed top-9 right-5 text-xs ml-2 underline">feedback⭐</Link> 
         </nav>
   )
