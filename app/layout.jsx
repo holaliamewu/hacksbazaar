@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={manrope.className}>
         <AuthProvider>
-          <span className="fixed left-0 bottom-[5svw] flex items-center justify-center w-screen">
+          <span className="fixed left-0 bottom-[5svw] text-black flex items-center justify-center w-screen">
             <nav className="flex justify-between space-x-8 bg-zinc-200 shadow px-8 md:px-12 py-2 rounded-full">
               {navsData.map((nav) => (
                 <Link 
