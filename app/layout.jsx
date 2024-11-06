@@ -15,24 +15,25 @@ export default function RootLayout({ children }) {
           title: "home",
           link: "/",
           icon: "Home",
-          released: true,
       },
       {
           title: "favourites",
           link: "/favourites",
           icon: "Heart",
-          released: false,
       },
       {
           title: "profile",
           link: "/profile",
           icon: "UserRound",
-          released: true,
       },
   ]
 
   return (
     <html lang="en">
+        <head >
+            <link rel="icon" type="image/png" sizes="32x32" href="/hacksbazaar-logo-short.png" />
+            <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        </head>
         <body className={manrope.className}>
             <AuthProvider >
                         <span className="fixed left-0 bottom-[5svw] flex items-center justify-center w-screen" >
@@ -40,11 +41,10 @@ export default function RootLayout({ children }) {
                                 {navsData.map((nav) => (
                                     <Link 
                                         key={nav.title}
-                                        href={nav.released ? nav.link : '/'} 
+                                        href={ nav.link } 
                                         className='flex flex-col items-center justify-center relative gap-1'>
                                         {nav.icon === 'Home' ? <Newspaper size='16' stroke-width='1.4' /> : nav.icon === 'Heart' ? <Heart size='18' stroke-width='1.5' /> : nav.icon === 'UserRound' ? <UserRound size='16' stroke-width='1.5' /> : null}
                                         <span className="text-[11px] ">{nav.title}</span>
-                                        {!nav.released &&  <ComingSoonTag />}
                                     </Link>
                                     ))}
                             </nav>

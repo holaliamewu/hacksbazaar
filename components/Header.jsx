@@ -25,11 +25,10 @@ export default function Header() {
           { !loggedIn && <span className="w-1/3" ></span>}
             <span className="relative font-semibold mx-auto z-3" >hacksbazaar.
                 <h3 className="text-[8px] z-1  bg-blue-400 rounded-full italic px-1  absolute right-[73px] -top-2 " >
-                  v0.2
+                  v0.3
                 </h3>
               </span>
-            { !loggedIn && <span onClick={ ()=> setShowAuthModal(true)} className="text-xs w-1/3">log in</span> }
-            <Link href='/feedback' className="fixed bottom-9 right-5 text-xs ml-2 underline">feedback⭐</Link> 
+            { !loggedIn && <span onClick={ ()=> setShowAuthModal(true)} className="flex w-fit text-xs w-1/3 cursor-pointer">log in</span> }
         </nav>
   )
 }
