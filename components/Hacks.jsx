@@ -34,6 +34,8 @@ export default function Hacks() {
         });
     }, [db]);
 
+    console.log(hacks)
+
     const storeHackToDB = () => {
         if (newHackMessage.length > 0 && loggedIn) {
             let newHack = {

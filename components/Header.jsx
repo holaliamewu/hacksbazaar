@@ -21,14 +21,13 @@ export default function Header() {
 
 
   return (
-        <nav className="flex justify-between items-center pt-8 " >
-          { !loggedIn && <span className="w-1/3" ></span>}
-            <span className="relative font-semibold mx-auto z-3" >hacksbazaar.
-                <h3 className="text-[8px] z-1  bg-blue-400 rounded-full italic px-1  absolute right-[73px] -top-2 " >
-                  v0.3
+        <nav className="flex justify-between items-center min-w-[540px] w-full mx-auto pt-8 " >
+            <span className="relative font-semibold mx-auto  z-3 " >hacksbazaar.
+                <h3 className="text-[8px] z-1  bg-blue-400 rounded-full italic px-1  absolute right-[63px] -top-1 " >
+                  v0.4
                 </h3>
               </span>
-            { !loggedIn && <span onClick={ ()=> setShowAuthModal(true)} className="flex w-fit text-xs w-1/3 cursor-pointer">log in</span> }
+            { !loggedIn && <span onClick={ ()=> setShowAuthModal(true)} className="flex w-fit py-1 px-2 border border-stone-200 rounded-xl text-xs w-1/3 cursor-pointer">log in</span> }
         </nav>
   )
 }
